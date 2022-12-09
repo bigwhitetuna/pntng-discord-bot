@@ -50,7 +50,7 @@ check for /dalletext completion prompt and respond
 // function for submitting TEXT request and getting response
 const submitText = async (text , user) => {
   connect()
-  console.log(`${user} submitted text: '${text}', waiting for response...`)
+  console.log(`${user} submitted dalle text: '${text}', waiting for response...`)
   let response = await openai.createCompletion({
     model: completionModel,
     prompt: text,
@@ -82,7 +82,7 @@ check for /dalleimage prompt and respond
 // function for submitting image request and getting response
 const submitImage = async (text, user) => {
   connect()
-  console.log(`${user} submitted image prompt: '${text}', waiting for response...`)
+  console.log(`${user} submitted dalle image prompt: '${text}', waiting for response...`)
   let response = await openai.createImage({
     prompt: text,
     n: 2,
