@@ -44,10 +44,13 @@ discordClient.on('messageCreate', async msg => {
         // display response
         submitImage(prompt, user).then((bufferImages) => {
             console.log('Uploading images as files')
+            // trying to add them as all one upload instead of individual ones
+            let imageArray = []
             bufferImages.forEach(i => {
-                const file = new AttachmentBuilder(Buffer.from(i, "base64"), `${i.slice(0,12)}`);
-                msg.reply({files: [file]})
+                const image = new AttachmentBuilder(Buffer.from(i, "base64"), `${i.slice(0,12)}`);
+                imageArray.push(image)
             });
+            msg.reply({files: imageArray})
         console.log('Responded!')
         }).catch((error) => {
         console.log(error)
