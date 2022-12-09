@@ -39,8 +39,10 @@ const submitImage = async (prompt, user) => {
 discordClient.on('messageCreate', async msg => {
     if (msg.content.startsWith('/craiyon ')) {
         // get the text
+        // TODO: add support for limiting the # of response images (max 9) so there isn't a wall of images if you don't want it
         const prompt = msg.content.slice(9);
         const user = msg.author.username;
+        msg.reply(`Craiyon responds a little slow, so it may take a few minutes to populate. Just be patient!`)
         // display response
         submitImage(prompt, user).then((bufferImages) => {
             console.log('Uploading images as files')
@@ -52,6 +54,7 @@ discordClient.on('messageCreate', async msg => {
             });
             msg.reply({files: imageArray})
         console.log('Responded!')
+        console.log('--------------------')
         }).catch((error) => {
         console.log(error)
         });
