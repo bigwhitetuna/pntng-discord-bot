@@ -9,7 +9,7 @@ const discordClient = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
-discordClient.login(process.env.DISCORD_TOKEN)
+discordClient.login(process.env.CRAIYON_BOT_DISCORD_TOKEN)
 
 // setup craiyon connection
 let craiyon = require('craiyon');
@@ -26,18 +26,16 @@ const submitImage = async (prompt, user) => {
     const result = await craiyon.generate({
       prompt,
     });
-    console.log("Result received. Processing now.");
     let bufferImages = [];
     result.images.forEach(image => {
         bufferImages.push(image.base64);
     });
-    console.log('Added images to buffer')
     return bufferImages;
 }
 
 // check messages and trigger
 discordClient.on('messageCreate', async msg => {
-    if (msg.content.startsWith('/craiyon ')) {
+    if (msg.content.startsWith('/craiyon ') || msg.content.startsWith('/Craiyon ')) {
         // get the text
         // TODO: add support for limiting the # of response images (max 9) so there isn't a wall of images if you don't want it
         const prompt = msg.content.slice(9);
@@ -45,7 +43,6 @@ discordClient.on('messageCreate', async msg => {
         msg.reply(`Craiyon responds a little slow, so it may take a few minutes to populate. Just be patient!`)
         // display response
         submitImage(prompt, user).then((bufferImages) => {
-            console.log('Uploading images as files')
             // trying to add them as all one upload instead of individual ones
             let imageArray = []
             bufferImages.forEach(i => {
@@ -56,7 +53,8 @@ discordClient.on('messageCreate', async msg => {
         console.log('Responded!')
         console.log('--------------------')
         }).catch((error) => {
-        console.log(error)
+            msg.reply('There was an error with your request.')
+            console.log(error)
         });
     }
 });

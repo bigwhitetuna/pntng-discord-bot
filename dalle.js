@@ -9,7 +9,7 @@ const discordClient = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
-discordClient.login(process.env.DISCORD_TOKEN)
+discordClient.login(process.env.DALLE_BOT_DISCORD_TOKEN)
 // set up openai package and set configuration
 const { Configuration, OpenAIApi } = require('openai');
 const configuration = new Configuration({
@@ -103,11 +103,14 @@ discordClient.on('messageCreate', async msg => {
     // get the text
     const text = msg.content.slice(12);
     const user = msg.author.username
+    msg.reply(`Dalle images responds a little slow (but much faster than Craiyon), so it may take a few seconds to populate. Just be patient!`)
     // display response
     submitImage(text, user).then((response) => {
       msg.reply(response);
       console.log('Responded!')
+      console.log('--------------------')
     }).catch((error) => {
+      msg.reply('There was an error with your request. Please try again. If it continues not working, it is most likely your prompt being denied by Dalle content detection.')
       console.log(error)
     });
   }
